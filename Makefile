@@ -1,9 +1,9 @@
-PROJECT=hello
+PROJECT=stack
 CC=clang
-C_FLAGS=-c		\
-		-W		\
-		-Wall	\
-		-std=c11	\
+C_FLAGS=-c			\
+		-W			\
+		-Wall		\
+		-std=c17	\
 		-pedantic
 
 C_SRC=$(wildcard src/*.c)
