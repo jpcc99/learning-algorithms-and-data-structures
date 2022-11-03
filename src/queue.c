@@ -1,39 +1,39 @@
-#include "stack.h"
+#include "queue.h"
 #include <stdlib.h>
 #include <stdio.h>
 
-Stack stack_new() {
-	Stack new_stack = { 
+Queue queue_new() {
+	Queue new_queue = { 
 		.p_arr = NULL,
 		.len = 0,
 		.capacity = 0,
 	};
-	return new_stack;
+	return new_queue;
 }
 
-Stack stack_with_capacity(size_t capacity) {
-	Stack new_stack = { 
+Queue queue_with_capacity(size_t capacity) {
+	Queue new_queue = { 
 		.p_arr = (int*)malloc(sizeof(int) * capacity),
 		.len = 0,
 		.capacity = capacity,
 	};
-	return new_stack;
+	return new_queue;
 }
 
-void stack_delete(Stack* self) {
+void queue_delete(Queue* self) {
 	free(self->p_arr);
 	self->p_arr = NULL;
 }
 
-const int* stack_peek(const Stack* self) {
+const int* queue_peek(const Queue* self) {
 	if (self->len < 1) {
-		fprintf(stderr, "Trying to peek at a empty stack");
+		fprintf(stderr, "Trying to peek at a empty queue");
 		return NULL;
 	}
 	return &self->p_arr[self->len - 1];
 }
 
-Result_i stack_push(Stack* self, int item) {
+Result_i queue_push(Queue* self, int item) {
 	if (self->capacity == 0) {
 		self->p_arr = (int*)malloc(sizeof(int));
 		if (self->p_arr == NULL) 
@@ -52,12 +52,22 @@ Result_i stack_push(Stack* self, int item) {
 	return result_new_ok(0);
 }
 
-Result_i stack_pop(Stack *self) {
+void swap(int *p_a, int *p_b) {
+	int tmp = *p_a;
+	*p_a = *p_b;
+	*p_b = tmp;
+}
+
+Result_i queue_remove(Queue *self) {
 	if (self->capacity == 0 || self->len == 0) {
-		return result_new_err("Trying to pop a empty stack");
+		return result_new_err("Trying to pop a empty queue");
 	}
-	size_t len = self->len - 1;
-	int popped = self->p_arr[len];
-	self->len = len;
-	return result_new_ok(popped);
+	int removed = self->p_arr[0];
+	if (self->len > 1) {
+		for (size_t i = 1; i < self->len; i++) {
+			swap(&self->p_arr[i - 1], &self->p_arr[i]);
+		}
+	}
+	self->len--;
+	return result_new_ok(removed);
 }

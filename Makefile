@@ -1,4 +1,4 @@
-PROJECT=stack
+PROJECT=queue
 CC=clang
 C_FLAGS=-c			\
 		-W			\
